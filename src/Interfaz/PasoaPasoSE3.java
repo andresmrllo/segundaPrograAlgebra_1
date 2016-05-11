@@ -180,9 +180,9 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
     public void pasoApasoAUXU(double[][] matriz,double[] listaresultados,double[] soluciones)
     {
         //System.out.println("Fila2 = "+fila);
-        for(int i=1;i<=fila-1;i++)
+        for(int i=orden;i>=fila-1;i--)
         {
-            if(i>1)
+            if(i < orden)
             {
                 listaresultados[fila-1] = listaresultados[fila-1] -(listaresultados[fila]*matriz[fila-1][columna-1]);
                 System.out.println("resultado -= "+listaresultados[columna-1]+" * "+matriz[fila-1][columna-1]);
