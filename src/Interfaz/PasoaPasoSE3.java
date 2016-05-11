@@ -7,6 +7,8 @@ package Interfaz;
 
 
 import java.awt.Color;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -45,8 +47,8 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
         this.getContentPane().setBackground(new Color(20,138,156));
         jPanelL.setBackground(new Color(20,138,156));
         jPanelU.setBackground(new Color(20,138,156));
-        MatrizU = matrizU.getData();
-        MatrizL = matrizL.getData();
+        MatrizU = formatearDouble(matrizU.getData());
+        MatrizL = formatearDouble(matrizL.getData());
         orden = lSoluciones.length;
         resultadosTemp = new double[orden];
         resultadosFinal = new double[orden];
@@ -79,7 +81,24 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
             }
         }
     }
+    private double[][] formatearDouble(double[][] matriz)
+    {
+        double resultado[][] = new double[matriz.length][matriz.length];
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        for (int i = 0; i<matriz.length;i++)
+        {
+            for(int j = 0;j< matriz[i].length;j++)
+            {
+                Number n = matriz[i][j];
+                Double d = n.doubleValue();
+                resultado[i][j]= Double.parseDouble(df.format(d));
+            }
+        }
         
+        return resultado;
+    }
+    
     private void generarMatricesL() {
         int contadorFilas1 = 1;
         int contadorColumnas1 = 1;
@@ -89,6 +108,7 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
             if (contadorColumnas1 <= orden) {
                 JTextField entrada1 = new JTextField();
                 entrada1.setName("Matriz L" + contadorFilas1 + contadorColumnas1);
+                
                 entrada1.setText(Double.toString(MatrizL [contadorFilas1 - 1][contadorColumnas1 - 1]));
                 jPanelL.add(entrada1);
                 entrada1.setBounds(x, y, 60, 40);
@@ -153,29 +173,30 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
        else
        {
            listaresultados[fila-1] = (soluciones[fila-1])/matriz[fila-1][orden-1];
+           System.out.println((soluciones[fila-1])+" / "+matriz[fila-1][orden-1]);
+           System.out.println("resultado xyz1 ="+listaresultados[fila-1]);
            fila--;
-           System.out.println("resultado xyz ="+listaresultados[fila-1]);
        }
     }
     
     public void pasoApasoAUXU(double[][] matriz,double[] listaresultados,double[] soluciones)
     {
-        System.out.println("Fila2 = "+fila);
-        for(int i=1;i<=fila-1;i++)
+        //System.out.println("Fila2 = "+fila);
+        for(int i=1;i<=fila;i++)
         {
             if(i>1)
             {
-                listaresultados[fila-1] -= soluciones[fila]-listaresultados[columna]*matriz[fila][columna];
+                listaresultados[fila-1] -= soluciones[fila-1]-listaresultados[fila]*matriz[fila-1][columna-1];
             }
             else
             {
-                listaresultados[fila-1] = soluciones[fila]-listaresultados[columna]*matriz[fila][columna];
+                listaresultados[fila-1] = soluciones[fila-1]-listaresultados[fila]*matriz[fila-1][columna-1];
             }
             
             listaresultados[fila-1] = listaresultados[fila-1]/matriz[fila-1][columna-1];
             columna--;
         }
-        System.out.println(listaresultados[fila-1]);
+        System.out.println("resultado xyz2 ="+listaresultados[fila-1]);
         fila--;
         columna=orden;
     }
@@ -311,14 +332,14 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        /*RealMatrix coefficients = new Array2DRowRealMatrix(new double[][] { { 1, 4, -2 }, { 3, -2, 5 }, { 2, 3, 1 } }, false);
+        RealMatrix coefficients = new Array2DRowRealMatrix(new double[][] { { 1, 4, -2 }, { 3, -2, 5 }, { 2, 3, 1 } }, false);
         DecompositionSolver solver = new LUDecomposition(coefficients).getSolver();
         RealVector constants = new ArrayRealVector(new double[] { 3, 14, 11 }, false);
         RealVector solution = solver.solve(constants);
         
         System.out.println("1 "+solution.getEntry(0));
         System.out.println("2 "+solution.getEntry(1));
-        System.out.println("3 "+solution.getEntry(2));*/
+        System.out.println("3 "+solution.getEntry(2));
         if (opcion==1)
         {
             pasoApasoL(MatrizL,resultadosTemp,listastaSoluciones);
@@ -332,6 +353,8 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
             else
             {
                 columna = orden;
+                System.out.println("columna :"+columna);
+                System.out.println("fila :"+fila);
                 pasoApasoU(MatrizU,resultadosFinal,resultadosTemp);
             }
         }
