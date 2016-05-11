@@ -153,13 +153,14 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
        else
        {
            listaresultados[fila-1] = (soluciones[fila-1])/matriz[fila-1][orden-1];
-           System.out.println(listaresultados[fila-1]);
            fila--;
+           System.out.println("resultado xyz ="+listaresultados[fila-1]);
        }
     }
     
     public void pasoApasoAUXU(double[][] matriz,double[] listaresultados,double[] soluciones)
     {
+        System.out.println("Fila2 = "+fila);
         for(int i=1;i<=fila-1;i++)
         {
             if(i>1)
@@ -331,7 +332,6 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
             else
             {
                 columna = orden;
-                System.out.println("fila = "+ fila);
                 pasoApasoU(MatrizU,resultadosFinal,resultadosTemp);
             }
         }
