@@ -128,7 +128,9 @@ public class Aplicacion3 extends javax.swing.JFrame {
                 contadorColumnas = 1;
             }
         }
+        System.out.println(Arrays.toString(normal[0]));
         System.out.println(Arrays.toString(normal[1]));
+        System.out.println(Arrays.toString(normal[2]));
         return normal;
     }
     
