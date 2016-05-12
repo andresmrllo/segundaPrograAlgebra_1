@@ -5,16 +5,12 @@
  */
 package Interfaz;
 
-import static Interfaz.matrizLU.orden;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
 
 /**
  *
@@ -24,7 +20,9 @@ public class Aplicacion3 extends javax.swing.JFrame {
     public static int orden;
     List<JTextField> listaMatriz= new ArrayList<>();
     List<JTextField> listaSoluciones= new ArrayList<>();
-    public static double[][] LU;
+    public static double[][] matriz;
+    public static double[][] matrizL;
+    public static double[][] matrizU;
     /**
      * Creates new form Aplicacion3
      * @param cantidad
@@ -36,7 +34,22 @@ public class Aplicacion3 extends javax.swing.JFrame {
         this.getContentPane().setBackground(new Color(20,138,156));
         panelMatriz.setBackground(new Color(20,138,156));
         panelSolucion.setBackground(new Color(20,138,156));
+        matriz = new double[orden][orden];
+        matrizL = new double[orden][orden];
+        matrizU = new double[orden][orden];
         generarMatrices();
+    }
+    
+    public Aplicacion3(int cantidad,double[][] matrizp,double [] soluciones) {
+        orden=cantidad;
+        initComponents();
+        this.getContentPane().setBackground(new Color(20,138,156));
+        panelMatriz.setBackground(new Color(20,138,156));
+        panelSolucion.setBackground(new Color(20,138,156));
+        matriz = matrizp;
+        matrizL = new double[orden][orden];
+        matrizU = new double[orden][orden];
+       generarMatricesConValores(matrizp,soluciones);
     }
     
     /**
@@ -74,6 +87,91 @@ public class Aplicacion3 extends javax.swing.JFrame {
             listaSoluciones.add(entrada);
             entrada.setBounds(x, y, 60, 40);
             y += 40;
+        }
+    }
+    
+        private void generarMatricesConValores(double matrizOriginal[][],double[] soluciones) {
+        int contadorFilas1 = 1;
+        int contadorColumnas1 = 1;
+        int x = 20;
+        int y = 40;
+        while (contadorFilas1 <= orden) 
+        {
+            if (contadorColumnas1 <= orden) {
+                JTextField entrada = new JTextField();
+                entrada.setName("Entrada" + contadorFilas1 + contadorColumnas1);
+                entrada.setText(Double.toString(Math.rint((matrizOriginal[contadorFilas1 - 1][contadorColumnas1 - 1]) * 100) / 100));
+                panelMatriz.add(entrada);
+                listaMatriz.add(entrada);
+                entrada.setBounds(x, y, 60, 40);
+                entrada.setBounds(x, y, 60, 40);
+                x += 60;
+                contadorColumnas1++;
+            } else {
+                contadorColumnas1 = 1;
+                y += 40;
+                x = 20;
+                contadorFilas1++;
+            }
+        }
+                x=10;
+        y = 40;
+        for (int i = 0;i<orden;i++)
+        {
+            JTextField entrada = new JTextField();
+            entrada.setName("Entrada" + contadorFilas1 + contadorColumnas1);
+            entrada.setText(Double.toString(Math.rint((soluciones[i]) * 100) / 100));
+            panelSolucion.add(entrada);
+            listaSoluciones.add(entrada);
+            entrada.setBounds(x, y, 60, 40);
+            y += 40;
+        }
+    }
+    
+    public void llenarL() {
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                if (i == j) {
+                    matrizL[i][j] = 1;
+                } else {
+                    matrizL[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    public void llenarU() {
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                matrizU[i][j] = 0;
+            }
+        }
+    }
+
+    public void factorizarLU() {
+        double suma;
+
+        llenarL();
+        llenarU();
+
+        for (int i = 1; i <= orden; i++) {
+            for (int j = i; j <= orden; j++) {
+                suma = 0;
+                for (int k = 1; k <= i - 1; k++) {
+                    suma = matrizL[i - 1][k - 1] * matrizU[k - 1][j - 1] + suma;
+                }
+
+                matrizU[i - 1][j - 1] = matriz[i - 1][j - 1] - suma;
+            }
+
+            for (int j = i + 1; j <= orden; j++) {
+                suma = 0;
+                for (int k = 1; k <= i - 1; k++) {
+                    suma = matrizL[j - 1][k - 1] * matriz[k - 1][i - 1] + suma;
+                }
+                matrizL[j - 1][i - 1] = (matriz[j - 1][i - 1] - suma) / matrizU[i - 1][i - 1];
+            }
+            matrizL[i - 1][i - 1] = 1;
         }
     }
     
@@ -259,7 +357,14 @@ public class Aplicacion3 extends javax.swing.JFrame {
         }
         else
         {
-            RealMatrix matriz = MatrixUtils.createRealMatrix(getMatriz());
+            matriz = getMatriz();
+            factorizarLU();
+            System.out.println("Matriz L:" + Arrays.deepToString(matrizL));
+            System.out.println("Matriz U:" + Arrays.deepToString(matrizU));
+            PasoaPasoSE3 Saplicacion3 = new PasoaPasoSE3(matrizU,matrizL,matriz,getListaSolucion());
+            Saplicacion3.setVisible(true);
+            this.dispose();
+            /*RealMatrix matriz = MatrixUtils.createRealMatrix(getMatriz());
             if (new LUDecomposition(matriz).getU() != null && new LUDecomposition(matriz).getL()!= null)
             {
                 PasoaPasoSE3 Saplicacion3 = new PasoaPasoSE3(new LUDecomposition(matriz).getU(),new LUDecomposition(matriz).getL(),getListaSolucion());
@@ -269,7 +374,7 @@ public class Aplicacion3 extends javax.swing.JFrame {
             else
             {
                 JOptionPane.showMessageDialog(null, "La matriz es singular por lo tanto no se puede factorizar");
-            }
+            }*/
         }
         
         /**
