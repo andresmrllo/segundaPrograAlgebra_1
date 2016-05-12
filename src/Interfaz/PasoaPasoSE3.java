@@ -50,6 +50,7 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
         listastaSoluciones = lSoluciones;
         generarMatricesU();
         generarMatricesL();
+        
     }
 
     
