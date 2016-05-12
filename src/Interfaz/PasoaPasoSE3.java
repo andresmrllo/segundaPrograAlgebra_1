@@ -178,7 +178,7 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
     
     public void pasoApasoAUXU(double[][] matriz,double[] listaresultados,double[] soluciones)
     {
-        //System.out.println("Fila2 = "+fila);
+        ///System.out.println("Fila2 = "+fila);
         for(int i=orden;i>=fila-1;i--)
         {
             if(i < orden)
