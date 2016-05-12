@@ -179,22 +179,25 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
     public void pasoApasoAUXU(double[][] matriz,double[] listaresultados,double[] soluciones)
     {
         ///System.out.println("Fila2 = "+fila);
-        for(int i=orden;i>=fila-1;i--)
+        for(int i=fila;i<=orden;i++)
         {
-            if(i < orden)
+            if(i != fila)
             {
-                listaresultados[fila-1] = listaresultados[fila-1] -(listaresultados[fila]*matriz[fila-1][columna-1]);
-                System.out.println("resultado -= "+listaresultados[columna-1]+" * "+matriz[fila-1][columna-1]);
+                if (orden==i)
+                {
+                    listaresultados[fila-1] = listaresultados[fila-1]/matriz[fila-1][columna-1];
+                    System.out.println("S"+(fila-1)+" ="+listaresultados[fila-1]+"\n");
+                }
+                else 
+                {
+                    listaresultados[fila-1] = listaresultados[fila-1] -(listaresultados[columna-1]*matriz[fila-1][columna-1]);
+                    System.out.println("resultado -= "+listaresultados[columna-1]+" * "+matriz[fila-1][columna-1]);
+                }
             }
             else
             {
-                listaresultados[fila-1] = soluciones[fila-1]-(listaresultados[fila]*matriz[fila-1][columna-1]);
+                listaresultados[fila-1] = soluciones[fila-1]-(listaresultados[columna-1]*matriz[fila-1][columna-1]);
                 System.out.println("resultado = "+soluciones[fila-1]+" - "+listaresultados[columna-1]+" * "+matriz[fila-1][columna-1]);
-            }
-            if (fila-1==i)
-            {
-                listaresultados[fila-1] = listaresultados[fila-1]/matriz[fila-1][columna-1];
-                System.out.println("");
             }
             //
             columna--;
