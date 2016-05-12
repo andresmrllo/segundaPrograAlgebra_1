@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 /**
  *
@@ -43,6 +45,8 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
         this.getContentPane().setBackground(new Color(20,138,156));
         jPanelL.setBackground(new Color(20,138,156));
         jPanelU.setBackground(new Color(20,138,156));
+        jPanelSoluciones.setBackground(new Color(20,138,156));
+        jPanelSolucionesf.setBackground(new Color(20,138,156));
         MatrizU = formatearDouble(matrizU);
         MatrizL = formatearDouble(matrizL);
         Matrizoriginal = formatearDouble(mOriginal);
@@ -50,6 +54,7 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
         resultadosTemp = new double[orden];
         resultadosFinal = new double[orden];
         listastaSoluciones = lSoluciones;
+        agregarSolucionpanel(jPanelSoluciones,lSoluciones);
         generarMatricesU();
         generarMatricesL();
         
@@ -151,8 +156,8 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
            listaresultados[fila-1] = Math.rint(soluciones[fila-1] * 100)/ 100;
            jTextAreaResultado.append("abc"+(fila-1)+" ="+listaresultados[fila-1]+"\n");
            fila++;
-           
        }
+       agregarSolucionpanel(jPanelSoluciones,listaresultados);
     }
     
     public void pasoApasoAUXL(double[][] matriz,double[] listaresultados,double[] soluciones)
@@ -196,6 +201,7 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
            //System.out.println("resultado xyz1 ="+listaresultados[fila-1]);
            fila--;
        }
+       agregarSolucionpanel(jPanelSolucionesf,listaresultados);
     }
     
     public void pasoApasoAUXU(double[][] matriz,double[] listaresultados,double[] soluciones)
@@ -228,6 +234,57 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
         fila--;
         columna=orden;
     }
+    
+    
+    public void marcarFilaColumna(float fila, JPanel miPanel1, double[][] m)
+    {
+         miPanel1.removeAll();
+         //miPanel2.removeAll();
+        JTextField entrada;
+        int contadorfilas =1;
+        int contadorColumnas =1;
+        int x = 20;
+        int y = 40;
+        while(contadorfilas <= m.length )
+        {
+            
+            entrada = new JTextField();
+            if (contadorColumnas <= orden)
+            {
+                entrada.setText(Double.toString(m[contadorfilas-1][contadorColumnas-1]));
+                if(contadorfilas-1 == fila )
+                {
+                    entrada.setBackground(Color.red);
+                }
+                miPanel1.add(entrada);
+                entrada.setBounds(x, y, 60, 40);
+                UIManager.put("entrada.disabledForeground",Color.red);
+                x += 60;
+                contadorColumnas++;
+                } else {
+                    contadorColumnas = 1;
+                    y += 40;
+                    x = 20;
+                    contadorfilas++;
+                }
+        }
+    }
+    
+    private void agregarSolucionpanel(JPanel panel, double[] soluciones)
+    {
+        panel.removeAll();
+        int x=10;
+        int y = 40;
+        for (int i = 0;i<orden;i++)
+        {
+            JTextField entrada = new JTextField();
+            entrada.setName("Entrada" + i);
+            entrada.setText(Double.toString(Math.rint((soluciones[i]) * 100) / 100));
+            panel.add(entrada);
+            entrada.setBounds(x, y, 60, 40);
+            y += 40;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -248,8 +305,10 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel1Soluciones = new javax.swing.JPanel();
+        jPanelSoluciones = new javax.swing.JPanel();
         jPanelSolucionesf = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         jTextArea3.setColumns(20);
         jTextArea3.setRows(5);
@@ -314,14 +373,14 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
 
         jLabel2.setText("Matriz U");
 
-        javax.swing.GroupLayout jPanel1SolucionesLayout = new javax.swing.GroupLayout(jPanel1Soluciones);
-        jPanel1Soluciones.setLayout(jPanel1SolucionesLayout);
-        jPanel1SolucionesLayout.setHorizontalGroup(
-            jPanel1SolucionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanelSolucionesLayout = new javax.swing.GroupLayout(jPanelSoluciones);
+        jPanelSoluciones.setLayout(jPanelSolucionesLayout);
+        jPanelSolucionesLayout.setHorizontalGroup(
+            jPanelSolucionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 79, Short.MAX_VALUE)
         );
-        jPanel1SolucionesLayout.setVerticalGroup(
-            jPanel1SolucionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanelSolucionesLayout.setVerticalGroup(
+            jPanelSolucionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -336,6 +395,10 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
             .addGap(0, 249, Short.MAX_VALUE)
         );
 
+        jLabel3.setText("Soluciones");
+
+        jLabel4.setText("Soluciones Final");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -347,36 +410,48 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonAtras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanelL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1Soluciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanelU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanelSolucionesf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanelL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(99, 99, 99)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanelSoluciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanelU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanelSolucionesf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(81, 81, 81)
+                        .addComponent(jLabel4)))
                 .addContainerGap(15, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(99, 99, 99)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(140, 140, 140))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanelSolucionesf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jPanelL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1Soluciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanelSoluciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanelU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -404,10 +479,12 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
        
         if (opcion==1)
         {
+            marcarFilaColumna(fila-1,jPanelL,MatrizL);
             pasoApasoL(MatrizL,resultadosTemp,listastaSoluciones);
         }
         else
         {
+            marcarFilaColumna(5,jPanelL,MatrizL);
             if(fila==0)
             {
                 JOptionPane.showMessageDialog(null, "Se terminaron los pasos");
@@ -417,6 +494,7 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
                 columna = orden;
                 //System.out.println("columna :"+columna);
                 //System.out.println("fila :"+fila);
+                marcarFilaColumna(fila-1,jPanelU,MatrizU);
                 pasoApasoU(MatrizU,resultadosFinal,resultadosTemp);
             }
         }
@@ -471,8 +549,10 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1Soluciones;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanelL;
+    private javax.swing.JPanel jPanelSoluciones;
     private javax.swing.JPanel jPanelSolucionesf;
     private javax.swing.JPanel jPanelU;
     private javax.swing.JScrollPane jScrollPane1;

@@ -114,7 +114,7 @@ public class Aplicacion3 extends javax.swing.JFrame {
                 contadorFilas1++;
             }
         }
-                x=10;
+        x=10;
         y = 40;
         for (int i = 0;i<orden;i++)
         {
