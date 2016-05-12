@@ -149,7 +149,6 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
                 listaresultados[fila-1] = soluciones[fila-1]-listaresultados[columna-1]*matriz[fila-1][columna-1];
             }
             columna++;
-           
         }
         jTextAreaResultado.append("abc"+(fila-1)+" ="+listaresultados[fila-1]+"\n");
         if(fila == orden)
@@ -192,8 +191,12 @@ public class PasoaPasoSE3 extends javax.swing.JFrame {
                 listaresultados[fila-1] = soluciones[fila-1]-(listaresultados[fila]*matriz[fila-1][columna-1]);
                 System.out.println("resultado = "+soluciones[fila-1]+" - "+listaresultados[columna-1]+" * "+matriz[fila-1][columna-1]);
             }
-            
-            //listaresultados[fila-1] = listaresultados[fila-1]/matriz[fila-1][columna-1];
+            if (fila-1==i)
+            {
+                listaresultados[fila-1] = listaresultados[fila-1]/matriz[fila-1][columna-1];
+                System.out.println("");
+            }
+            //
             columna--;
         } 
         jTextAreaResultado.append("S"+(fila-1)+" ="+listaresultados[fila-1]+"\n");
